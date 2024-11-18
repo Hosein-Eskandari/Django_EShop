@@ -7,9 +7,8 @@ def checkout(request):
     return render(request, "checkout.html")
 
 def index(request):
-    return redirect(reverse("shop:store"))
-    # return render(request, "index.html")
- 
+    return render(request, "index.html")
+
 def product(request):
     return render(request, "product.html")
 
