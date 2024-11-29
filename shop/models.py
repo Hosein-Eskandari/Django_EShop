@@ -18,7 +18,7 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField()
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=None, null=True)
 
 
 class Cart(models.Model):
