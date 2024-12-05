@@ -2,13 +2,24 @@ from tkinter.constants import CASCADE
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q  # for or operation
 
 # Create your models here.
 
+class BaseModelManager(models.Manager):
+
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted = None)
+        # return super().get_queryset().filter(Q(deleted = False) | Q(deleted = None)) # or operation
+
+
+
 class BaseModel(models.Model):
-    deleted = models.BooleanField(null=True, blank=True, editable=False)
+    deleted = models.BooleanField(default=False, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = BaseModelManager()
 
     class Meta:
         abstract = True
@@ -17,6 +28,9 @@ class BaseModel(models.Model):
 
 class Category(BaseModel):
     title = models.CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Product(BaseModel):
@@ -27,6 +41,9 @@ class Product(BaseModel):
     quantity = models.PositiveIntegerField()
     status = models.BooleanField(default=True) 
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=None, null=True)
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Cart(BaseModel):
