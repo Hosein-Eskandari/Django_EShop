@@ -1,4 +1,5 @@
 from tkinter.constants import CASCADE
+from typing import Any
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -9,7 +10,7 @@ from django.db.models import Q  # for or operation
 class BaseModelManager(models.Manager):
 
     def get_queryset(self):
-        return super().get_queryset().filter(deleted = None)
+        return super().get_queryset().filter(deleted = False)
         # return super().get_queryset().filter(Q(deleted = False) | Q(deleted = None)) # or operation
 
 
@@ -20,6 +21,10 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = BaseModelManager()
+
+    def delete(self, using=None, keep_parents=False):
+        self.deleted = True
+        self.save()
 
     class Meta:
         abstract = True
@@ -50,6 +55,9 @@ class Cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
+
+    # def __str__(self) -> str:
+    #     return self.user.__str__
 
 
 class Order(BaseModel):
