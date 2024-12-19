@@ -1,10 +1,11 @@
 from tkinter.constants import CASCADE
 from typing import Any
 
-from django.contrib.auth.models import User
+from django.conf import settings
+#from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q  # for or operation
-
+from .utility import upload_file_with_date
 # Create your models here.
 
 class BaseModelManager(models.Manager):
@@ -12,8 +13,6 @@ class BaseModelManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(deleted = False)
         # return super().get_queryset().filter(Q(deleted = False) | Q(deleted = None)) # or operation
-
-
 
 class BaseModel(models.Model):
     deleted = models.BooleanField(default=False, editable=False)
@@ -42,7 +41,7 @@ class Product(BaseModel):
     title = models.CharField(max_length=100)
     content = models.TextField()
     price = models.DecimalField(decimal_places=2, max_digits= 10)
-    image = models.ImageField()
+    image = models.ImageField(upload_to=upload_file_with_date(base_dir="media_files", sub_dir="product_images"))
     quantity = models.PositiveIntegerField()
     status = models.BooleanField(default=True) 
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=None, null=True)
@@ -50,9 +49,12 @@ class Product(BaseModel):
     def __str__(self) -> str:
         return self.title
 
+    def get_fields(self):
+        return [(field.name, getattr(self, field.name)) for field in self._meta.fields]
+
 
 class Cart(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 
@@ -62,7 +64,7 @@ class Cart(BaseModel):
 
 class Order(BaseModel):
     total_price = models.DecimalField(decimal_places=2, max_digits= 10)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     status =  models.BooleanField(null=True)
 
 

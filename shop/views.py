@@ -1,13 +1,16 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, reverse
+from . import models
 
 
 def checkout(request):
     return render(request, "checkout.html")
 
 def index(request):
-    return render(request, "index.html")
+    products = models.Product.objects.all()
+    print(products)
+    return render(request, "index.html", context = {"products" : products})
 
 def product(request):
     return render(request, "product.html")
