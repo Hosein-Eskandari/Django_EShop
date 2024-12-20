@@ -1,3 +1,4 @@
+from audioop import reverse
 from tkinter.constants import CASCADE
 from typing import Any
 
@@ -51,6 +52,9 @@ class Product(BaseModel):
 
     def get_fields(self):
         return [(field.name, getattr(self, field.name)) for field in self._meta.fields]
+
+    # def get_absolute_url(self):
+    #     return reverse("detail", kwargs={"id": self.id})
 
 
 class Cart(BaseModel):

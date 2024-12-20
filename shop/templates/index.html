@@ -117,10 +117,11 @@
                                                 <img src="{{ product.image.url }}" alt="">
                                             </div>
                                             <div class="product-body">
-                                                <h3 class="product-name"><a href="{{ product.get_absolute_url }}">{{ product.category }}</a></h3>
-                                                <h3 class="product-name"><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+                                                <h3 class="product-category"><a href="{% url 'shop:detail' id=product.id title=product.title %}">{{ product.category }}</a></h3>
+                                                <h3 class="product-name"><a href="{% url 'shop:detail' id=product.id title=product.title %}">{{ product.title }}</a></h3>
                                                 <h4 class="product-price">{{ product.price }}</h4>
                                             </div>
+
                                             <div class="add-to-cart">
                                                 <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                                             </div>
