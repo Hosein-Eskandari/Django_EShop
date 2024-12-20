@@ -9,5 +9,5 @@ urlpatterns = [
     path("", index, name="index"),
     path("<int:id>/<str:title>/", detail, name="detail"),
     path("checkout/", checkout, name="checkout"),
-    path("store/", store, name="store"),
+    path("store", store, name="store"),
 ]

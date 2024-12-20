@@ -1,4 +1,4 @@
-from audioop import reverse
+
 from tkinter.constants import CASCADE
 from typing import Any
 
@@ -6,6 +6,8 @@ from django.conf import settings
 #from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q  # for or operation
+from django.urls import reverse
+
 from .utility import upload_file_with_date
 # Create your models here.
 
@@ -53,8 +55,9 @@ class Product(BaseModel):
     def get_fields(self):
         return [(field.name, getattr(self, field.name)) for field in self._meta.fields]
 
-    # def get_absolute_url(self):
-    #     return reverse("detail", kwargs={"id": self.id})
+    def get_absolute_url(self):
+        return reverse("shop:detail", kwargs={"id": self.id, "title": self.title})
+
 
 
 class Cart(BaseModel):

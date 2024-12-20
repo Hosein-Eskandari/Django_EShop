@@ -40,7 +40,7 @@
                         </div>
                         <div class="shop-body">
                             <h3>Laptop<br>Collection</h3>
-                            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+                            <a href="{% url 'shop:store' %}?category=Laptop" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="shop-body">
                             <h3>Accessories<br>Collection</h3>
-                            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+                            <a href="{% url 'shop:store' %}?category=Accessories" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -67,8 +67,8 @@
                             <img src="{% static '/img/shop02.png'%}" alt="">
                         </div>
                         <div class="shop-body">
-                            <h3>Cameras<br>Collection</h3>
-                            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+                            <h3>Smartphone<br>Collection</h3>
+                            <a href="{% url 'shop:store' %}?category=Smartphone" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -117,8 +117,8 @@
                                                 <img src="{{ product.image.url }}" alt="">
                                             </div>
                                             <div class="product-body">
-                                                <h3 class="product-category"><a href="{% url 'shop:detail' id=product.id title=product.title %}">{{ product.category }}</a></h3>
-                                                <h3 class="product-name"><a href="{% url 'shop:detail' id=product.id title=product.title %}">{{ product.title }}</a></h3>
+                                                <h3 class="product-category"><a href="{{ product.get_absolute_url }}">{{ product.category }}</a></h3>
+                                                <h3 class="product-name"><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
                                                 <h4 class="product-price">{{ product.price }}</h4>
                                             </div>
 
