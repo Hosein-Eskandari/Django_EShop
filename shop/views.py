@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from . import models
+from .models import Product
+from decimal import Decimal
 
 
 def checkout(request):
@@ -50,10 +52,17 @@ def add_to_cart(request):
     if not cart:
         cart = request.session["cart"] = {}
 
-    cart[product_id] = {
-        "quantity" : quantity,
-        "price" : str(product.price)
-    }
+    if product_id in cart:
+        is_update = request.POST.get("update")
+        if bool(is_update):
+            cart[product_id]["quantity"] = int(quantity)
+        else:
+            cart[product_id]["quantity"] += int(quantity)
+    else:
+        cart[product_id] = {
+            "quantity" : quantity,
+            "price" : str(product.price)
+        }
 
     request.session["cart"] = cart
 
@@ -68,8 +77,21 @@ def cart_detail(request):
     products = models.Product.objects.filter(id__in=product_ids)
     for product in products:
         cart[str(product.id)]["product"] = product
+
+    for item in cart.values():
+        item['total_price'] = Decimal(item['price']) * item['quantity']
     if cart:
         return render(request, "cart_detail.html", {"cart": cart})
 
     return render(request, "cart_detail.html")
 
+def remove_from_cart(request, product_id):
+    if Product.objects.filter(id=product_id).exists():
+        cart = request.session.get("cart")
+        if cart:
+            if str(product_id) in cart:
+                del cart[str(product_id)]
+                request.session.modified = True
+        return redirect(reverse("shop:cart_detail"))
+
+    raise Http404("product doesnt exist.")
