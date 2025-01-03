@@ -45,24 +45,24 @@
             <th>Remove</th>
         </tr>
 
-        {% for key, values in cart.items %}
+        {% for item in cart %}
             <tr>
                 <td>
-                    <img src="{{ values.product.image.url }}" alt="{{ values.product.title }}" width="100px"/>
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" width="100px"/>
                 </td>
                 <td>
-                    <a href="{{ values.product.get_absolute_url }}">
-                        {{ values.product.title }}
+                    <a href="{{ item.product.get_absolute_url }}">
+                        {{ item.product.title }}
                     </a>
                 </td>
-                <td>{{ values.price }}</td>
+                <td>{{ item.price }}</td>
                 <td>
                     <div class="add-to-cart">
                         <form method="post" action="{% url 'shop:add_to_cart' %}">
                             <div class="qty-label">
                                 <div class="input-number">
-                                    <input type="number" name="quantity" value="{{ values.quantity }}">
-                                    <input type="hidden" name="product_id" value="{{ values.product.id }}">
+                                    <input type="number" name="quantity" value="{{ item.quantity }}">
+                                    <input type="hidden" name="product_id" value="{{ item.product.id }}">
                                     <input type="hidden" name="update" value="1">
                                     <span class="qty-up">+</span>
                                     <span class="qty-down">-</span>
@@ -75,11 +75,11 @@
 
                     </div>
                 </td>
-                <td>{{ values.total_price }}</td>
+                <td>{{ item.total_price }}</td>
                 <td>
                     <button class="add-to-cart-btn"
-                            href="{% url 'shop:remove_from_cart' product_id=values.product.id %}">
-                        <a type="button" href="{% url 'shop:remove_from_cart' product_id=values.product.id %}">
+                            href="{% url 'shop:remove_from_cart' product_id=item.product.id %}">
+                        <a type="button" href="{% url 'shop:remove_from_cart' product_id=item.product.id %}">
                             <i class="fa fa-trash-o alert-danger"></i>
                             remove
                         </a>
